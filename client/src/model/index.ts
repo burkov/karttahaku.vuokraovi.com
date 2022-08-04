@@ -1,13 +1,15 @@
+import isObject from 'lodash.isobject';
+
 export interface Rental {
   run: string;
   rtype: string;
   htype: string;
-  desc: string;
-  habd?: any;
+  desc: string | null;
+  habd: any | null;
   rent: number;
   area: string;
   lnk: string;
-  img: string;
+  img: string | null;
   addr: Addr;
 }
 
@@ -19,13 +21,24 @@ export interface Addr {
 export interface MapMarker {
   lat: number;
   lon: number;
+}
+
+export enum MapMarkerType {
+  RENTAL = 'RENTAL',
+  RENTAL_GROUP = 'RENTAL_GROUP',
+}
+
+export interface RentalMapMarker extends MapMarker {
+  rental: Rental;
+  type: MapMarkerType.RENTAL;
+}
+
+export interface RentalGroupMapMarker extends MapMarker {
+  rentals: Rental[];
+  type: MapMarkerType.RENTAL_GROUP;
   gh: string;
-  rental?: Rental;
-  rentals?: Rental[];
-  type: string;
 }
 
 export interface MapSearchResponse {
-  mapMarkers: MapMarker[];
+  mapMarkers: (RentalMapMarker | RentalGroupMapMarker)[];
 }
-

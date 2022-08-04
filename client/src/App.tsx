@@ -1,32 +1,17 @@
-import React, {useEffect, useState} from 'react';
-import {MapSearchResponse} from "./model";
+import React from 'react';
+import {MapSearchPage} from './pages/MapSearch';
+import {Col, Layout, Row, Typography} from 'antd';
 
 function App() {
-  const [state, setState] = useState<MapSearchResponse>()
-  useEffect(() => {
-    fetch("/map/map-search", {
-      "method": "POST",
-      "credentials": "include",
-      "headers": {
-        "accept": "*/*",
-        "accept-language": "en-US,en;q=0.9,ru;q=0.8,la;q=0.7",
-        "cache-control": "no-cache",
-        "content-type": "application/json",
-        "pragma": "no-cache",
-      },
-      "body": JSON.stringify({
-        zoom: 12,
-        latNE: 61.120128337728254, latSW: 61.01183107946681, lonSW: 27.97756806237249, lonNE: 28.538214119501397,
-        sc: {
-          rtype: "apartment rental"
-        }
-      }),
-    }).then(e => e.json()).then(setState);
-  }, [])
   return (
-    <>
-      loaded: <code>{state?.mapMarkers.length}</code>
-    </>
+    <Layout>
+      <Layout.Header>
+        <Typography.Title style={{color: "white", margin: "6px 0 0 0"}}>Rental finder 9000</Typography.Title>
+      </Layout.Header>
+      <Layout.Content style={{padding: '12px 48px 0 48px'}}>
+        <MapSearchPage/>
+      </Layout.Content>
+    </Layout>
   );
 }
 
