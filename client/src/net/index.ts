@@ -83,7 +83,6 @@ const enrichDescription = (marker: PartialRentalMapMarkerViewModel): PartialRent
     const rooms = parseInt(r[1]);
     if (Number.isFinite(rooms)) marker.rooms = rooms;
   }
-  console.log(r);
   return marker;
 };
 
