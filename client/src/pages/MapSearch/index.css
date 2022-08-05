@@ -1,3 +1,7 @@
 .ant-table-cell-row-hover {
     background: none !important;
 }
+
+.ant-table-column-sort {
+    background: none !important;
+}

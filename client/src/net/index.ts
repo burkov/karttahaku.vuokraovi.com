@@ -1,6 +1,5 @@
 import useSWR from 'swr';
 import { Addr, MapSearchResponse, Rental, RentalGroupMapMarker, RentalMapMarker } from '../model';
-import objectHash from 'object-hash';
 import { isRentalGroupMapMarker, isRentalMapMarker } from '../model/index.guard';
 
 export const toggleHidden = (id: string, newState: boolean) => {
@@ -59,7 +58,6 @@ export const useRentalMapMarkerViewModels = (params: MapSearchParams) =>
   );
 
 export type RentalMapMarkerViewModel = Omit<RentalMapMarker, 'type'> & {
-  id: string;
   gh: string | null;
   hidden: boolean;
   starred: boolean;
@@ -106,10 +104,9 @@ const toViewModels = (markers?: (RentalMapMarker | RentalGroupMapMarker)[]): und
   if (markers === undefined) return undefined;
   const result: RentalMapMarkerViewModel[] = [];
   const pushRental = (partial: PartialRentalMapMarkerViewModel) => {
-    const id = objectHash(partial);
     enrichAddress(partial);
     enrichDescription(partial);
-    result.push({ id, ...partial, hidden: isHidden(id), starred: isStarred(id) });
+    result.push({ ...partial, hidden: isHidden(partial.rental.run), starred: isStarred(partial.rental.run) }); 
   };
   for (const marker of markers) {
     if (isRentalMapMarker(marker)) {

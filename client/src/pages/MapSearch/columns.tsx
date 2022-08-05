@@ -22,13 +22,13 @@ export const useMapSearchColumns = (
       title: '',
       dataIndex: '',
       width: '90px',
-      render: (_, { id, hidden, starred }) => {
+      render: (_, { hidden, starred, rental: { run } }) => {
         const mutateFound = (fn: (rental: RentalMapMarkerViewModel) => void) => {
           mutate(
             (prev) =>
               produce(prev, (draft?: RentalMapMarkerViewModel[]) => {
                 if (draft) {
-                  fn(draft.find((e) => e.id === id)!);
+                  fn(draft.find((e) => e.rental.run === run)!);
                 }
               }),
             false,
@@ -43,7 +43,7 @@ export const useMapSearchColumns = (
               onClick={() => {
                 mutateFound((e) => {
                   e.starred = !e.starred;
-                  toggleStarred(id, e.starred);
+                  toggleStarred(e.rental.run, e.starred);
                 });
               }}
             />
@@ -53,7 +53,7 @@ export const useMapSearchColumns = (
               onClick={() => {
                 mutateFound((e) => {
                   e.hidden = !e.hidden;
-                  toggleHidden(id, e.hidden);
+                  toggleHidden(e.rental.run, e.hidden);
                 });
               }}
             />
@@ -67,10 +67,9 @@ export const useMapSearchColumns = (
       width: '130px',
       render: ({ img, lnk }: Rental, { hidden }) => {
         if (hidden) return;
-        if (!img) return;
         return (
-          <Typography.Link href={`https://www.vuokraovi.com/${lnk}`} target="_blank">
-            <img src={`https:${img}`} width={128} alt="rental" />
+          <Typography.Link href={`https://www.vuokraovi.com/${lnk}?locale=en`} target="_blank">
+            {img ? <img src={`https:${img}`} width={128} alt="rental" /> : 'Link'}
           </Typography.Link>
         );
       },
