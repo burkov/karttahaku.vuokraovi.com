@@ -1,0 +1,10 @@
+version: '3.9'
+services:
+  database:
+    image: postgres:latest
+    ports:
+      - "8432:5432"
+    environment:
+      - POSTGRES_USER=rentalfinder
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=rentalfinder
