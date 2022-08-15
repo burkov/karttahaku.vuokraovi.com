@@ -17,10 +17,9 @@ export const MapSearchPage: React.FC = () => {
     lonNE: '28.538214119501397',
   });
   const columns = useMapSearchColumns(mutate);
-  const hidden = data?.reduce((acc, { hidden }) => acc + (hidden ? 1 : 0), 0) ?? 0;
-  const starred = data?.reduce((acc, { starred }) => acc + (starred ? 1 : 0), 0) ?? 0;
+  const hidden = data?.reduce((acc, { hiddenAt }) => acc + (hiddenAt ? 1 : 0), 0) ?? 0;
+  const starred = data?.reduce((acc, { starredAt }) => acc + (starredAt ? 1 : 0), 0) ?? 0;
   const rest = (data?.length ?? 0) - hidden - starred;
-  const dataSource = showHidden ? data?.filter((e) => e.hidden) : data?.filter((e) => !e.hidden);
   return (
     <Row>
       <Col span={24}>
@@ -29,33 +28,32 @@ export const MapSearchPage: React.FC = () => {
             <Table
               size="small"
               pagination={{ position: ['topRight', 'bottomRight'], hideOnSinglePage: true }}
-              dataSource={data?.filter((e) => !e.hidden && !e.starred)}
+              dataSource={data?.filter((e) => !e.hiddenAt && !e.starredAt)}
               columns={columns}
               loading={data === undefined}
               rowKey={(e) => e.rental.run}
-              rowClassName={({ starred }) => (starred ? styles.starredRow : '')}
+              rowClassName={({ starredAt }) => (starredAt ? styles.starredRow : '')}
             />
           </Tabs.TabPane>
           <Tabs.TabPane tab={`Starred (${starred})`} key="2">
             <Table
               size="small"
               pagination={{ position: ['topRight', 'bottomRight'], hideOnSinglePage: true }}
-              dataSource={data?.filter((e) => e.starred)}
+              dataSource={data?.filter((e) => e.starredAt).sort((a, b) => b.starredAt!.diff(a.starredAt))}
               columns={columns}
               loading={data === undefined}
               rowKey={(e) => e.rental.run}
-              rowClassName={({ starred }) => (starred ? styles.starredRow : '')}
+              rowClassName={({ starredAt }) => (starredAt ? styles.starredRow : '')}
             />
           </Tabs.TabPane>
           <Tabs.TabPane tab={`Hidden (${hidden})`} key="3">
             <Table
               size="small"
               pagination={{ position: ['topRight', 'bottomRight'], hideOnSinglePage: true }}
-              dataSource={data?.filter((e) => e.hidden)}
+              dataSource={data?.filter((e) => e.hiddenAt).sort((a, b) => b.hiddenAt!.diff(a.hiddenAt))}
               columns={columns}
               loading={data === undefined}
               rowKey={(e) => e.rental.run}
-              rowClassName={({ starred }) => (starred ? styles.starredRow : '')}
             />
           </Tabs.TabPane>
         </Tabs>

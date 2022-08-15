@@ -1,5 +1,3 @@
-import isObject from 'lodash.isobject';
-
 export interface Rental {
   run: string;
   rtype: string;

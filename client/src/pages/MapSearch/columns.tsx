@@ -4,8 +4,9 @@ import { Button, Typography } from 'antd';
 
 import { EyeInvisibleFilled, EyeInvisibleOutlined, GlobalOutlined, StarFilled, StarOutlined } from '@ant-design/icons';
 import { MutatorCallback, MutatorOptions } from 'swr';
-import { RentalMapMarkerViewModel, toggleHidden, toggleStarred } from '../../net';
+import {RentalMapMarkerViewModel, toggleHidden, toggleStarred} from '../../net';
 import produce from 'immer';
+import dayjs from 'dayjs';
 
 const m2Price = ({ rental: { area, rent } }: RentalMapMarkerViewModel) => {
   return Math.round(rent / Number.parseFloat(area));
@@ -22,7 +23,7 @@ export const useMapSearchColumns = (
       title: '',
       dataIndex: '',
       width: '90px',
-      render: (_, { hidden, starred, rental: { run } }) => {
+      render: (_, { starredAt, hiddenAt, rental: { run } }) => {
         const mutateFound = (fn: (rental: RentalMapMarkerViewModel) => void) => {
           mutate(
             (prev) =>
@@ -38,22 +39,24 @@ export const useMapSearchColumns = (
         return (
           <>
             <Button
-              icon={starred ? <StarFilled /> : <StarOutlined />}
+              icon={starredAt ? <StarFilled /> : <StarOutlined />}
               type="text"
               onClick={() => {
                 mutateFound((e) => {
-                  e.starred = !e.starred;
-                  toggleStarred(e.rental.run, e.starred);
+                  const isStarred = !!e.starredAt;
+                  isStarred ? delete e.starredAt : (e.starredAt = dayjs());
+                  toggleStarred(e.rental.run, !isStarred);
                 });
               }}
             />
             <Button
-              icon={hidden ? <EyeInvisibleFilled /> : <EyeInvisibleOutlined />}
+              icon={hiddenAt ? <EyeInvisibleFilled /> : <EyeInvisibleOutlined />}
               type="text"
               onClick={() => {
                 mutateFound((e) => {
-                  e.hidden = !e.hidden;
-                  toggleHidden(e.rental.run, e.hidden);
+                  const isHidden = !!e.hiddenAt;
+                  isHidden ? delete e.hiddenAt : (e.hiddenAt = dayjs());
+                  toggleHidden(e.rental.run, !isHidden);
                 });
               }}
             />
@@ -65,8 +68,7 @@ export const useMapSearchColumns = (
       title: '',
       dataIndex: ['rental'],
       width: '130px',
-      render: ({ img, lnk }: Rental, { hidden }) => {
-        if (hidden) return;
+      render: ({ img, lnk }: Rental) => {
         return (
           <Typography.Link href={`https://www.vuokraovi.com/${lnk}?locale=en`} target="_blank">
             {img ? <img src={`https:${img}`} width={128} alt="rental" /> : 'Link'}
@@ -78,8 +80,7 @@ export const useMapSearchColumns = (
       title: 'Address',
       dataIndex: ['rental', 'addr'],
       width: '20%',
-      render: ({ l1, l2, zip }: Addr & { zip?: string }, { lon, lat, hidden }) => {
-        if (hidden) return l2;
+      render: ({ l1, l2, zip }: Addr & { zip?: string }, { lon, lat }) => {
         return (
           <>
             <Typography.Text>
@@ -143,8 +144,7 @@ export const useMapSearchColumns = (
     {
       title: 'Description',
       dataIndex: ['rental'],
-      render: ({ rtype, htype, desc }: Rental, { hidden }) => {
-        if (hidden) return desc;
+      render: ({ rtype, htype, desc }: Rental) => {
         return (
           <>
             <Typography.Text>{desc ?? 'n/a'}</Typography.Text>
