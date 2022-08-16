@@ -4,11 +4,8 @@ import { Col, Row, Table, Tabs } from 'antd';
 import { useMapSearchColumns } from './columns';
 import styles from './index.module.css';
 import './index.css';
-import { useSearchParams } from 'react-router-dom';
 
 export const MapSearchPage: React.FC = () => {
-  const [search, setSearch] = useSearchParams();
-  const showHidden = search.get('showHidden') === 'true';
   const { data, mutate } = useRentalMapMarkerViewModels({
     zoom: 12,
     latNE: '61.120128337728254',

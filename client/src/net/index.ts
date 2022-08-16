@@ -1,6 +1,6 @@
 import useSWR from 'swr';
-import { Addr, MapSearchResponse, Rental, RentalGroupMapMarker, RentalMapMarker } from '../model';
-import { isRentalGroupMapMarker, isRentalMapMarker } from '../model/index.guard';
+import { Addr, MapSearchResponse, Rental, RentalGroupMapMarker, RentalMapMarker } from 'model';
+import { isRentalGroupMapMarker, isRentalMapMarker } from 'model/index.guard';
 import dayjs, { Dayjs } from 'dayjs';
 
 interface RentalUserData {

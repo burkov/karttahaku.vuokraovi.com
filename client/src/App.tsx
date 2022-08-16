@@ -1,6 +1,6 @@
 import React from 'react';
 import {MapSearchPage} from './pages/MapSearch';
-import {Col, Layout, Row, Typography} from 'antd';
+import {Layout, Typography} from 'antd';
 
 function App() {
   return (

@@ -1,5 +1,5 @@
 import { ColumnType } from 'antd/lib/table/interface';
-import { Addr, Rental } from '../../model';
+import { Addr, Rental } from 'model';
 import { Button, Typography } from 'antd';
 
 import { EyeInvisibleFilled, EyeInvisibleOutlined, GlobalOutlined, StarFilled, StarOutlined } from '@ant-design/icons';
